@@ -48,6 +48,19 @@ export async function sendTimeRangeAnalysis(req, res) {
 
   const reportOptions = extensionConfig ? extensionConfig.config_json : undefined;
 
+  // Set defautls
+  if(_.isUndefined(reportOptions.showPercentChange)) {
+    reportOptions.showPercentChange = true;
+  } else {
+    reportOptions.showPercentChange = false;
+  }
+
+  if(_.isUndefined(reportOptions.showUtilization)) {
+    reportOptions.showUtilization = true;
+  } else {
+    reportOptions.showUtilization = false;
+  }
+
   // Override day reports to use shift time.
   if(reportOptions.timeUnit.toLowerCase() === TimeUnit.Day) {
     reportOptions.timeUnit = TimeUnit.Shift;
@@ -143,6 +156,7 @@ export async function sendTimeRangeAnalysis(req, res) {
     _formatAggregateMetrics('unit', unitMetricConfigs, comparison, reportOptions),
     _formatAggregateMetrics('agencyResponses', unitMetricConfigs, comparison, reportOptions),
     _formatAggregateMetrics('battalion', battalionMetricConfigs, comparison, reportOptions),
+    _formatAggregateMetrics('jurisdiction', jurisdictionMetricConfigs, comparison, reportOptions),
     _formatAggregateMetrics('incidentType', incidentTypeMetricConfigs, comparison, reportOptions),
     _formatAggregateMetrics('agencyIncidentType', agencyIncidentTypeMetricConfigs, comparison, reportOptions),
   ];
@@ -280,6 +294,10 @@ const battalionMetricConfigs = [
   ['incidentCount'],
 ];
 
+const jurisdictionMetricConfigs = [
+  ['incidentCount'],
+];
+
 const incidentTypeMetricConfigs = [
   ['incidentCount'],
 ];
@@ -321,7 +339,7 @@ function _formatAlerts(ruleAnalysis, reportOptions) {
       }
 
       let showAlert = _.get(reportOptions, `sections.showAlertSummary[${violation.rule}]`);
-      if(_.isUndefined(showAlert) || showAlert) mergeVar.content.push(violation);
+      if(showAlert || (_.isUndefined(showAlert) && violation.default_visibility)) mergeVar.content.push(violation);
     });
   });
 

@@ -10,7 +10,10 @@ import { FireIncidentEventDurationRule60 } from './rules/fireIncidentEventDurati
 import { OvernightEventsRule } from './rules/overnightEventsRule';
 import { EventDurationSumRule } from './rules/eventDurationSumRule';
 import { TurnoutDurationOutlierRule } from './rules/turnoutDurationOutlierRule';
+import { TurnoutDurationOutlierRule120 } from './rules/turnoutDurationOutlierRule120';
+import { TurnoutDurationOutlierRule150 } from './rules/turnoutDurationOutlierRule150';
 import { TravelDurationOutlierRule } from './rules/travelDurationOutlierRule';
+
 import { Log } from '../util/log';
 
 export function previousTimeRange(timeRange) {
@@ -42,7 +45,8 @@ export function buildFireIncidentQuery(timeFilter) {
           .aggregation('percentiles', 'apparatus.extended_data.turnout_duration', { percents: 90 }))
         .aggregation('terms', 'apparatus.agency', { size: 500 }, unitAgg => unitAgg
           .aggregation('percentiles', 'apparatus.extended_data.turnout_duration', { percents: 90 }))))
-    .aggregation('terms', 'address.battalion', { size: 20, order: { _term: 'asc' }})
+    .aggregation('terms', 'address.battalion', { size: 20, order: { _term: 'asc' }, missing: "Unknown" })
+    .aggregation('terms', 'address.jurisdiction', { size: 20, order: { _term: 'asc' }, missing: "Unknown" })
     .aggregation('terms', 'description.type', { size: 1000, order: { _term: 'asc' }})
     .aggregation('terms', 'description.extended_data.AgencyIncidentCallTypeDescription', { size: 50, order: { _term: 'asc' }})
     .aggregation('percentile_ranks', 'durations.response.seconds', { values: 360 })
@@ -164,6 +168,12 @@ const battalionMetrics = [{
   setter: (obj, res) => _.set(obj, 'incidentCount', res),
 }];
 
+const jurisdictionMetrics = [{
+  getter: res => _.get(res, 'doc_count'),
+  setter: (obj, res) => _.set(obj, 'incidentCount', res),
+}];
+
+
 const incidentTypeMetrics = [{
   getter: res => _.get(res, 'doc_count'),
   setter: (obj, res) => _.set(obj, 'incidentCount', res),
@@ -214,6 +224,8 @@ export class IncidentAnalysisTimeRange {
       FireIncidentEventDurationRule30,
       FireIncidentEventDurationRule60,
       TurnoutDurationOutlierRule,
+      TurnoutDurationOutlierRule120,
+      TurnoutDurationOutlierRule150,
       TravelDurationOutlierRule,
     ];
 
@@ -298,6 +310,7 @@ export class IncidentAnalysisTimeRange {
         });
 
         comparison.battalion = analyzeAggregate(results, 'aggregations["agg_terms_address.battalion"]buckets', battalionMetrics);
+        comparison.jurisdiction = analyzeAggregate(results, 'aggregations["agg_terms_address.jurisdiction"]buckets', jurisdictionMetrics);
         comparison.incidentType = analyzeAggregate(results, 'aggregations["agg_terms_description.type"]buckets', incidentTypeMetrics);
         comparison.agencyIncidentType = analyzeAggregate(results, 'aggregations["agg_terms_description.extended_data.AgencyIncidentCallTypeDescription"]buckets', incidentTypeMetrics);
 

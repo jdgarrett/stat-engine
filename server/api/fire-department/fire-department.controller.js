@@ -2,6 +2,8 @@
 
 import _ from 'lodash';
 import Promise from 'bluebird';
+import axios from 'axios';
+import ngeohash from 'ngeohash';
 
 import {
   FireDepartment,
@@ -66,11 +68,10 @@ export async function create(req, res) {
   try {
     const fd = await newFireDepartment.save();
     await createCustomer(fd);
+    return res.json(fd.dataValues);
   } catch (err) {
     throw new UnprocessableEntityError(err.message);
   }
-
-  res.status(204).send();
 }
 
 export async function edit(req, res) {
@@ -203,4 +204,36 @@ export async function loadFireDepartment(req, res, next, id) {
 
   req.fireDepartment = fd;
   next();
+}
+
+export async function getStations(req, res) {
+  const firecares_id = req.fireDepartment.firecares_id;
+  const { data } = await axios.get(`https://firecares.org/api/v1/firestations/?department=${firecares_id}`);
+  const { objects } = data;
+
+  const stations = objects.map(station => {
+    const { geom } = station;
+    const { coordinates } = geom;
+    const [long, lat] = coordinates;
+    const geohash = ngeohash.encode(lat, long, 12);
+    return {
+      ...station,
+      geohash
+    };
+  });
+
+  res.json(stations);
+}
+
+export async function getJurisdictionalBoundary(req, res) {
+  const firecares_id = req.fireDepartment.firecares_id;
+  const { FIRECARES_USERNAME, FIRECARES_API_KEY } = process.env;
+  const url = `https://firecares.org/api/v1/fire-departments/${firecares_id}/?format=json&username=${FIRECARES_USERNAME}&api_key=${FIRECARES_API_KEY}`;
+
+  try  {
+    const { data } = await axios.get(url);
+    return res.json(data);
+  } catch (err) {
+    return res.status(500);
+  }
 }

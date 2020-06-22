@@ -61,6 +61,7 @@ export default class EffectiveResponseForceComponent {
 
   updatePlot() {
     if (this.data) {
+      this.layout.shapes = [];
       let erfTravel = {
         x: [],
         y: [],
@@ -122,10 +123,12 @@ export default class EffectiveResponseForceComponent {
       this.currentConfig = this.data.current_config;
 
       this.trace = [erfTravel, erfResponse, erfTotalResonse, incidentCounts];
+
       if (this.data.current_config) {
-        let maxX = erfTravel.x[erfTravel.y.length-1];
+        // add buffer of 2, so green background always renders
+        let maxX = Number(erfTravel.x[erfTravel.y.length-1]) + 2;
         let current = {
-          x: [this.data.current_config.erf + (Number(maxX)-this.data.current_config.erf)/2],
+          x: [(this.data.current_config.erf + maxX) / 2],
           y: [_.max(erfTotalResonse.y)+1],
           mode: 'text',
           text: [`ERF Compliance`],
@@ -157,7 +160,7 @@ export default class EffectiveResponseForceComponent {
   }
 }
 
-function getY(obj, path, ) {
+function getY(obj, path) {
   let raw = _.get(obj, path);
   if (_.isNil(raw)) return null;
 

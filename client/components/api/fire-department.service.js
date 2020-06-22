@@ -45,5 +45,20 @@ export default function FireDepartmentResource($resource) {
         resource: 'subscription',
       },
     },
+    getStations: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        id: '@id',
+        resource: 'stations',
+      },
+    },
+    getJurisdictionalBoundary: {
+      method: 'GET',
+      params: {
+        id: '@id',
+        resource: 'jurisdictional-boundary',
+      },
+    }
   });
 }

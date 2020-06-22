@@ -256,6 +256,10 @@ h2 {
   }
 }
 
+.width-100 {
+  width: 100%;
+}
+
 // Tables
 table {
   border-collapse: collapse;
@@ -384,6 +388,14 @@ table td {
       }
     }
   }
+}
+
+.table-row-empty {
+  padding: 5px;
+  text-align: center;
+  border-bottom: 1px solid $color-geyser;
+  border-right: 1px solid $color-geyser;
+  border-left: 1px solid $color-geyser;
 }
 
 .table {
@@ -696,6 +708,10 @@ input[type="radio"]:focus {
 
 .w80 {
   width: 80px;
+}
+
+.w40 {
+  width: 40px;
 }
 
 .w100 {
@@ -1887,6 +1903,20 @@ nav.section-nav {
   }
 }
 
+// Multi Select //
+.dropdown-menu {
+  padding: 0.5rem;
+
+  .checkbox > label {
+    display: flex;
+    
+    span {
+      margin-left: 5px;
+    }
+  }
+}
+
+
 @mixin multiline-ellipsis($line-count, $line-height) {
   display: -webkit-box;
   line-height: $line-height;
@@ -1898,6 +1928,76 @@ nav.section-nav {
   -webkit-box-orient: vertical;
   -moz-box-orient: vertical;
 }
+
+// Toggle Switch
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 25px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider.red {
+  background-color: red;
+}
+
+input:focus + .slider.red {
+  box-shadow: 0 0 1px red;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 
 /////////////////////////////////
 // IMPORT COMPONENTS //
@@ -1920,11 +2020,15 @@ nav.section-nav {
 @import '../app/account/signup/signup';
 @import '../app/user/user';
 @import '../app/twitter/twitter-home/twitter-home';
+@import '../app/exposure/exposure-home/exposure-home';
 @import '../app/admin/admin-home/admin-home';
 @import '../app/incident/incident';
 @import '../app/report/report';
 @import '../app/reporting/reporting';
 @import '../app/department-admin/department-admin';
+@import '../app/moveup/moveup-home/moveup-home';
+@import '../components/move-up-map/move-up-map.scss';
+@import '../app/notify/notification.scss';
 @import '../components/incident/incident';
 @import '../components/oauth-buttons/oauth-buttons';
 @import '../components/percent-change/percent-change';
@@ -1943,4 +2047,7 @@ nav.section-nav {
 @import '../components/view-mode/view-mode';
 @import '../components/chip/chip';
 @import '../components/dashboard-card/dashboard-card';
+@import '../components/tree-select/tree-select.scss';
+@import '../components/auto-complete/auto-complete.scss';
+@import '../components/subscription-banner/subscription-banner.scss';
 // endinject //

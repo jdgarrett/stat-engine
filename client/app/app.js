@@ -61,6 +61,8 @@ import user from './user';
 import reporting from './reporting';
 import departmentAdmin from './department-admin';
 import twitter from './twitter';
+import moveup from './moveup';
+import exposure from './exposure';
 import report from './report';
 import incident from './incident';
 import erf from './effective-response-force';
@@ -97,6 +99,8 @@ import logoAvatar from '../components/logo/logo-avatar.component';
 import nfpaAnalysis from '../components/nfpa-analysis/nfpa-analysis.component';
 import bulletChart from '../components/bullet-chart/bullet-chart.component';
 
+import moveUpMap from '../components/move-up-map/move-up-map.component';
+
 import trusted from '../components/trusted/trusted.filter';
 import orderObjectBy from '../components/order-object-by/order-object-by.filter';
 
@@ -113,6 +117,9 @@ import reportingUnitList from '../components/reporting-unit-list/reporting-unit-
 import toggleSwitch from '../components/toggle-switch/toggle-switch.component';
 import unsupportedBrowser from '../components/unsupported-browser/unsupported-browser.service';
 import chip from '../components/chip/chip.component';
+import treeSelect from '../components/tree-select/tree-select.component';
+import autoComplete from '../components/auto-complete/auto-complete.component';
+import subscriptionBanner from '../components/subscription-banner/subscription-banner.component';
 
 angular.module('statEngineApp', [
   ngAria,
@@ -158,6 +165,9 @@ angular.module('statEngineApp', [
   shift,
   departmentAdmin,
   twitter,
+  moveup,
+  moveUpMap,
+  exposure,
   'ui.bootstrap',
   footer,
   main,
@@ -182,6 +192,9 @@ angular.module('statEngineApp', [
   unsupportedBrowser,
   chip,
   erf,
+  treeSelect,
+  autoComplete,
+  subscriptionBanner
 ])
   .config(routeConfig)
   .config(buildConfig => {

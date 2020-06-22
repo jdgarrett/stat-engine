@@ -28,6 +28,7 @@ export default function(app) {
   app.use('/api/fire-departments', require('./api/fire-department'));
   app.use('/api/incidents', require('./api/incident'));
   app.use('/api/units', require('./api/units'));
+  app.use('/api/personnel', require('./api/personnel'));
   app.use('/api/twitter', require('./api/twitter'));
   app.use('/api/users', require('./api/user'));
   app.use('/api/reports', require('./api/report'));
@@ -38,6 +39,9 @@ export default function(app) {
   app.use('/api/workspaces', require('./api/workspace'));
   app.use('/api/fixture-template', require('./api/fixture-template'));
   app.use('/api/admin', require('./api/admin'));
+  app.use('/api/third-party', require('./api/third-party'));
+  app.use('/api/notify', require('./api/notify'));
+  app.use('/api/exposure', require('./api/exposure'));
 
   // Kibana
   app.use('/workspaces', require('./kibana/workspace'));
