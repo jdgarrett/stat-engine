@@ -9,7 +9,7 @@ import 'chai/register-should';
 
 
 
-describe('mvp', () => {
+describe.skip('mvp', () => {
   const req = {
     query: {
       type: '400',
@@ -42,7 +42,7 @@ describe('mvp', () => {
     });
   }).timeout(0);
 
-  it.only('should query', (done) => {
+  it('should query', (done) => {
     let res = {};
     findCurrentConfig(req, res, () => {
       console.dir(req)

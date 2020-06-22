@@ -79,6 +79,10 @@ export const Log = {
     logger.warn(message, { data, inspectOptions });
   },
 
+  test(message, data, inspectOptions) {
+    logger.test(message, { data, inspectOptions });
+  },
+
   info(message, data, inspectOptions) {
     logger.info(message, { data, inspectOptions });
   },
